@@ -1,47 +1,48 @@
 #include<iostream>
 using namespace std;
-typedef struct Book{
-	int id;
-	string title;
-	string author;
-	float price;
-}lib;
-void input(lib b1[])
-{
-    cout <<"Enter Details for 3 books: "<<endl;
-    for(int i=0; i<3; i++)
-    {
-	cin>>b1[i].id;
-    cin>>b1[i].title;
-    cin>>b1[i].author;
-    cin>>b1[i].price;
-    }
-}
-void display(lib b1[])
-{
-    cout << "Book Details: "<<endl;
-    for(int i=0; i<3; i++)
-    {
-        cout << "Book "<<i+1<<endl;
-        cout<<"ID: "<<b1[i].id<<endl;
-        cout<<"Title: "<<b1[i].title<<endl;
-        cout<<"Author: "<<b1[i].author<<endl;
-        cout<<"Price: "<<b1[i].price<<endl;
-    }
-}
-void totalprice(lib b1[])
-{
-    float total=0;
-    for(int i=0; i<3; i++)
-    {
-        total += b1[i].price;
-    }
-    cout <<"Total Price of 3 books: "<<total<<endl;
-}
+class Account{
+	long int accountNo;
+	string name;
+	int balance;
+	public:
+		Account(long int ac,string n,int b)
+		{
+			accountNo=ac;
+			name = n;
+			balance = b;
+		}
+		void withdraw(int n)
+		{
+			if(n>0 && n<balance)
+			{
+				balance -= n;
+				cout<<"balance after withdraw is : "<<balance;
+			}else{
+				cout<<"Invalid amount or more then balance\n";
+			}
+		}
+		void deposit(int n)
+		{
+			if(n>0)
+			{
+				balance += n;
+				cout<<"balance after deposit : "<<balance<<endl;
+			}else
+			{
+				cout<<"Invalid amount\n";
+			}
+		}
+		void display(){
+			cout<<"Account number is : "<<accountNo<<endl;
+			cout<<"Holder Name : "<<name<<endl;
+			cout<<"Current balance is : "<<balance<<endl;
+		}
+};
 int main()
 {
-	lib b1[3];
-    input(b1);
-    display(b1);
-    totalprice(b1);
+	Account a1(16477532,"Vivek",5000);
+	a1.display();
+	a1.deposit(500);
+	a1.withdraw(1000);
+	return 0;
 }
