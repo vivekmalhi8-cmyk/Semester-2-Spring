@@ -1,48 +1,81 @@
 #include<iostream>
 using namespace std;
-class Account{
-	long int accountNo;
-	string name;
-	int balance;
+class MedicationEntry{
 	public:
-		Account(long int ac,string n,int b)
-		{
-			accountNo=ac;
-			name = n;
-			balance = b;
-		}
-		void withdraw(int n)
-		{
-			if(n>0 && n<balance)
-			{
-				balance -= n;
-				cout<<"balance after withdraw is : "<<balance;
-			}else{
-				cout<<"Invalid amount or more then balance\n";
-			}
-		}
-		void deposit(int n)
-		{
-			if(n>0)
-			{
-				balance += n;
-				cout<<"balance after deposit : "<<balance<<endl;
-			}else
-			{
-				cout<<"Invalid amount\n";
-			}
-		}
-		void display(){
-			cout<<"Account number is : "<<accountNo<<endl;
-			cout<<"Holder Name : "<<name<<endl;
-			cout<<"Current balance is : "<<balance<<endl;
-		}
+	string Drugname;
+	int dose;
+	int timeGiven;
+	MedicationEntry(string Drugname,int dose,int timeGiven)
+	{
+		this->dose = dose;
+		this->Drugname = Drugname;
+		this->timeGiven = timeGiven;
+	}
+};
+class VitalSignCheck{
+	public:
+	float temperature;
+	int heartRate;
+	string timeCheck;
+	VitalSignCheck(float temperature,int heartRate,string timeCheck)
+	{
+		this->temperature = temperature;
+		this->heartRate = heartRate;
+		this->timeCheck = timeCheck;
+	}
+};
+class DiagnosisNote{
+	public:
+	string noteText;
+	string doctorName;
+	string date;
+	DiagnosisNote(string noteText,string doctorName,string date)
+	{
+		this->date = date;
+		this->noteText = noteText;
+		this->doctorName = doctorName;
+	}
+};
+class Patient{
+	public:
+	int id;
+	string name;
+	string dob;
+	MedicationEntry med;
+	VitalSignCheck vital;
+	DiagnosisNote dignos;
+	Patient(int id,string name,string dob,string dna,int d,int tg,float t,int h,string check,string nt,string dn,string date):med(dna,d,tg),dignos(nt,dn,date),vital(t,h,check)
+	{
+		this->name = name;
+		this->id = id;
+		this->dob = dob;
+	}
+	void show()
+	{
+		cout<<"Patient Name : "<<name<<endl;
+		cout<<"ID : "<<id<<endl;
+		cout<<"Date of Birth : "<<dob<<endl;
+		cout<<"\n=== Medication Report ===\n";
+		cout<<"Drug Name : "<<med.Drugname<<endl;
+		cout<<"How many times : "<<med.dose<<endl;
+		cout<<"For "<<med.timeGiven<<" days\n";
+		cout<<"\n=== Vital Sign Report ===\n";
+		cout<<"Body Temperature : "<<vital.temperature<<endl;
+		cout<<"Heart rate : "<<vital.heartRate<<endl;
+		cout<<"It have checked at "<<vital.timeCheck<<endl;
+		cout<<"\n=== Diagnosis Report ===\n";
+		cout<<"Doctor Name : "<<dignos.doctorName<<endl;
+		cout<<"Have Written : "<<dignos.noteText<<endl;
+		cout<<"At that Date : "<<dignos.date<<endl;
+	}
+	~Patient()
+	{
+		cout<<"All records are deleting here of #"<<id<<endl;
+	}
 };
 int main()
 {
-	Account a1(16477532,"Vivek",5000);
-	a1.display();
-	a1.deposit(500);
-	a1.withdraw(1000);
+	Patient p1(102,"Mahender","28/04/2007","paracetamol",2,15,37.7,89,"morning","Alwat take medicine twice a day","Vivek","12/07/026");
+	p1.show();
 	return 0;
 }
