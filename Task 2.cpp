@@ -1,47 +1,103 @@
 #include<iostream>
 using namespace std;
-typedef struct Book{
-	int id;
-	string title;
-	string author;
-	float price;
-}lib;
-void input(lib b1[])
-{
-    cout <<"Enter Details for 3 books: "<<endl;
-    for(int i=0; i<3; i++)
+class Message{
+private:
+    string text;
+public:
+    void setText(string t)
     {
-	cin>>b1[i].id;
-    cin>>b1[i].title;
-    cin>>b1[i].author;
-    cin>>b1[i].price;
+        text = t;
     }
+    string toString() const
+    {
+        return text;
+    }
+};
+class SMS : public Message{
+private:
+    string recipientContactNo;
+public:
+    void setRecipient(string r)
+    {
+        recipientContactNo = r;
+    }
+    string getRecipient()
+    {
+        return recipientContactNo;
+    }
+    string toString()
+    {
+        return "SMS to: " + recipientContactNo +
+               "\nMessage: " + Message::toString();
+    }
+};
+class Email : public Message{
+private:
+    string sender;
+    string receiver;
+    string subject;
+public:
+    void setSender(string s)
+    {
+        sender = s;
+    }
+    void setReceiver(string r)
+    {
+        receiver = r;
+    }
+    void setSubject(string s)
+    {
+        subject = s;
+    }
+    string getSender(){ return sender; }
+    string getReceiver(){ return receiver; }
+    string getSubject(){ return subject; }
+    string toString()
+    {
+        return "Sender: " + sender +
+               "\nReceiver: " + receiver +
+               "\nSubject: " + subject +
+               "\nMessage: " + Message::toString();
+    }
+};
+bool ContainsKeyword(const Message& messageObject, const string& keyword)
+{
+    string text = messageObject.toString();
+
+    if(text.find(keyword) != string::npos)
+        return true;
+
+    return false;
 }
-void display(lib b1[])
+string EncodeMessage(string text)
 {
-    cout << "Book Details: "<<endl;
-    for(int i=0; i<3; i++)
+    for(int i=0;i<text.length();i++)
     {
-        cout << "Book "<<i+1<<endl;
-        cout<<"ID: "<<b1[i].id<<endl;
-        cout<<"Title: "<<b1[i].title<<endl;
-        cout<<"Author: "<<b1[i].author<<endl;
-        cout<<"Price: "<<b1[i].price<<endl;
+        if(text[i]=='Z')
+            text[i]='A';
+        else if(text[i]=='z')
+            text[i]='a';
+        else if(isalpha(text[i]))
+            text[i]=text[i]+1;
     }
-}
-void totalprice(lib b1[])
-{
-    float total=0;
-    for(int i=0; i<3; i++)
-    {
-        total += b1[i].price;
-    }
-    cout <<"Total Price of 3 books: "<<total<<endl;
+    return text;
 }
 int main()
 {
-	lib b1[3];
-    input(b1);
-    display(b1);
-    totalprice(b1);
+    SMS sms1;
+    sms1.setRecipient("03001234567");
+    sms1.setText("Hello Vivek");
+    cout<<sms1.toString()<<endl;
+    Email email1;
+    email1.setSender("vivek@gmail.com");
+    email1.setReceiver("mahender@gmail.com");
+    email1.setSubject("Leave");
+    email1.setText("This is Java");
+    cout<<"\n"<<email1.toString()<<endl;
+    if(ContainsKeyword(email1,"Java"))
+        cout<<"\nKeyword Found\n";
+    else
+        cout<<"\nKeyword Not Found\n";
+    string encoded = EncodeMessage(email1.toString());
+    cout<<"\nEncoded Message:\n"<<encoded;
 }
