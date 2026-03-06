@@ -1,81 +1,103 @@
 #include<iostream>
 using namespace std;
-class MedicationEntry{
-	public:
-	string Drugname;
-	int dose;
-	int timeGiven;
-	MedicationEntry(string Drugname,int dose,int timeGiven)
-	{
-		this->dose = dose;
-		this->Drugname = Drugname;
-		this->timeGiven = timeGiven;
-	}
+class Message{
+private:
+    string text;
+public:
+    void setText(string t)
+    {
+        text = t;
+    }
+    string toString() const
+    {
+        return text;
+    }
 };
-class VitalSignCheck{
-	public:
-	float temperature;
-	int heartRate;
-	string timeCheck;
-	VitalSignCheck(float temperature,int heartRate,string timeCheck)
-	{
-		this->temperature = temperature;
-		this->heartRate = heartRate;
-		this->timeCheck = timeCheck;
-	}
+class SMS : public Message{
+private:
+    string recipientContactNo;
+public:
+    void setRecipient(string r)
+    {
+        recipientContactNo = r;
+    }
+    string getRecipient()
+    {
+        return recipientContactNo;
+    }
+    string toString()
+    {
+        return "SMS to: " + recipientContactNo +
+               "\nMessage: " + Message::toString();
+    }
 };
-class DiagnosisNote{
-	public:
-	string noteText;
-	string doctorName;
-	string date;
-	DiagnosisNote(string noteText,string doctorName,string date)
-	{
-		this->date = date;
-		this->noteText = noteText;
-		this->doctorName = doctorName;
-	}
+class Email : public Message{
+private:
+    string sender;
+    string receiver;
+    string subject;
+public:
+    void setSender(string s)
+    {
+        sender = s;
+    }
+    void setReceiver(string r)
+    {
+        receiver = r;
+    }
+    void setSubject(string s)
+    {
+        subject = s;
+    }
+    string getSender(){ return sender; }
+    string getReceiver(){ return receiver; }
+    string getSubject(){ return subject; }
+    string toString()
+    {
+        return "Sender: " + sender +
+               "\nReceiver: " + receiver +
+               "\nSubject: " + subject +
+               "\nMessage: " + Message::toString();
+    }
 };
-class Patient{
-	public:
-	int id;
-	string name;
-	string dob;
-	MedicationEntry med;
-	VitalSignCheck vital;
-	DiagnosisNote dignos;
-	Patient(int id,string name,string dob,string dna,int d,int tg,float t,int h,string check,string nt,string dn,string date):med(dna,d,tg),dignos(nt,dn,date),vital(t,h,check)
-	{
-		this->name = name;
-		this->id = id;
-		this->dob = dob;
-	}
-	void show()
-	{
-		cout<<"Patient Name : "<<name<<endl;
-		cout<<"ID : "<<id<<endl;
-		cout<<"Date of Birth : "<<dob<<endl;
-		cout<<"\n=== Medication Report ===\n";
-		cout<<"Drug Name : "<<med.Drugname<<endl;
-		cout<<"How many times : "<<med.dose<<endl;
-		cout<<"For "<<med.timeGiven<<" days\n";
-		cout<<"\n=== Vital Sign Report ===\n";
-		cout<<"Body Temperature : "<<vital.temperature<<endl;
-		cout<<"Heart rate : "<<vital.heartRate<<endl;
-		cout<<"It have checked at "<<vital.timeCheck<<endl;
-		cout<<"\n=== Diagnosis Report ===\n";
-		cout<<"Doctor Name : "<<dignos.doctorName<<endl;
-		cout<<"Have Written : "<<dignos.noteText<<endl;
-		cout<<"At that Date : "<<dignos.date<<endl;
-	}
-	~Patient()
-	{
-		cout<<"All records are deleting here of #"<<id<<endl;
-	}
-};
+bool ContainsKeyword(const Message& messageObject, const string& keyword)
+{
+    string text = messageObject.toString();
+
+    if(text.find(keyword) != string::npos)
+        return true;
+
+    return false;
+}
+string EncodeMessage(string text)
+{
+    for(int i=0;i<text.length();i++)
+    {
+        if(text[i]=='Z')
+            text[i]='A';
+        else if(text[i]=='z')
+            text[i]='a';
+        else if(isalpha(text[i]))
+            text[i]=text[i]+1;
+    }
+    return text;
+}
 int main()
 {
-	Patient p1(102,"Mahender","28/04/2007","paracetamol",2,15,37.7,89,"morning","Alwat take medicine twice a day","Vivek","12/07/026");
-	p1.show();
-	return 0;
+    SMS sms1;
+    sms1.setRecipient("03001234567");
+    sms1.setText("Hello Vivek");
+    cout<<sms1.toString()<<endl;
+    Email email1;
+    email1.setSender("vivek@gmail.com");
+    email1.setReceiver("mahender@gmail.com");
+    email1.setSubject("Leave");
+    email1.setText("This is Java");
+    cout<<"\n"<<email1.toString()<<endl;
+    if(ContainsKeyword(email1,"Java"))
+        cout<<"\nKeyword Found\n";
+    else
+        cout<<"\nKeyword Not Found\n";
+    string encoded = EncodeMessage(email1.toString());
+    cout<<"\nEncoded Message:\n"<<encoded;
 }
