@@ -1,84 +1,45 @@
 #include<iostream>
+#include<algorithm>
 using namespace std;
-class Restaurant;
-class Order;
-class Customer{
-	string name;
-	public:
-		Customer(string name)
-		{
-		this->name=name;
-		}
-		string getname()
-		{
-			return name;
-		}
-		void PlaceOrder(Restaurant* r,string food);
+class WeatherStats{
+    public:
+    double calculateAverageTemperature(double temp[],int n)
+    {
+        double total=0;
+        for(int i=0;i<n;i++)
+        {
+            total += temp[i];
+        }
+        return total/n;
+    }
+    double getTemperatureFluctuation(double temp[],int n)
+    {
+        double min=0,max=0;
+        min = temp[0];
+        max = temp[0];
+        for(int i=0;i<n;i++)
+        {
+            if(temp[i]>max)
+            {
+                max = temp[i];
+            }
+            if(temp[i]<min)
+            {
+                min = temp[i];
+            }
+        }
+        cout<<min<<"  "<<max<<endl;
+        return max-min;
+    }
 };
-class Restaurant{
-	string name;
-	public:
-		Restaurant(string name)
-		{
-			this->name = name;
-		}
-		string getName()
-		{
-			return name;
-		}
-		void takeOrder(Order* o);
-};
-class Order{
-	public:
-	static int count;
-	int id;
-	string restaurant;
-	string customer;
-	string foodItem;
-	Restaurant *r;
-	Customer *c;
-		Order(Restaurant *r,Customer *c,string foodItem)
-		{
-			this->customer = c->getname();
-			this->restaurant = r->getName();
-			this->foodItem = foodItem;
-			count++;
-			this->id=1000+count;
-		}
-		void print()
-		{
-			cout<<"Order #"<<id<<": "<<foodItem<<" for "<<customer<<" from "<<restaurant<<endl;
-		}
-};
-int Order::count=0;
-void Customer::PlaceOrder(Restaurant* r,string food)
-{
-	cout<<r->getName()<<" making: "<<food<<endl;
-}
-void Restaurant::takeOrder(Order* o)
-{
-	cout<<o->customer<<" placed order at "<<name<<endl;
-}
 int main()
 {
-	Restaurant r1("Pizza Heaven");
-	Restaurant r2("Taco Fiesta");
-	Customer c1("Alice");
-	Customer c2("Bob");
-	Order o1(&r1,&c1,"Pepperoni Pizza");
-	Order o2(&r2,&c2,"Burito");
-	cout<<"\n=== PLACING ORDERS ===\n";
-	r1.takeOrder(&o1);
-	r2.takeOrder(&o2);
-	r2.takeOrder(&o1);
-	cout<<"\n=== ORDER DETAILS ===\n";
-	o1.print();
-	o2.print();
-	cout<<"\n=== RESTAURANT STATUS ===\n";
-	c1.PlaceOrder(&r1,"Pepperoni Pizza");
-	c2.PlaceOrder(&r2,"Burrito");
-	cout<<"\n=== AFTER ORDERS ARE GONE ===\n";
-	cout<<"Customer Still exist: "<<o1.customer<<endl;;
-	cout<<"Restaurant still exists: "<<o2.restaurant<<endl;
-	return 0;
+    double arr[]={23.4,67.9,23.3,43.2,12,76};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    WeatherStats w1;
+    cout<<"Average Temperature : "<<
+    w1.calculateAverageTemperature(arr,n)<<endl;
+    cout<<"Temperature Fluctuation : "<<
+    w1.getTemperatureFluctuation(arr,n)<<endl;
+    return 0;
 }
