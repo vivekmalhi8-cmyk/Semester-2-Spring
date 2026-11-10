@@ -1,0 +1,26 @@
+name: C++ build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y g++
+
+      - name: Compile all C++ source files
+        run: |
+          set -e
+          shopt -s nullglob
+          for f in *.cpp; do
+            echo "Compiling $f"
+            g++ -std=c++17 -I. "$f" -o "/tmp/${f%.cpp}"
+          done
